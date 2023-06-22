@@ -1,7 +1,7 @@
 plugins {
     java
     kotlin("jvm") version "1.8.10"
-    id("org.jetbrains.intellij") version "1.13.1"
+    id("org.jetbrains.intellij") version "1.13.2"
 }
 
 group = "io.github.changwook987"
@@ -10,14 +10,17 @@ version = "1.0-SNAPSHOT"
 repositories {
     mavenCentral()
 }
-
 // Configure Gradle IntelliJ Plugin
 // Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
 intellij {
     version.set("2022.1.4")
     type.set("IC") // Target IDE Platform
-
-    plugins.set(listOf(/* Plugin Dependencies */))
+    downloadSources.set(true)
+    plugins.set(
+        listOf(
+            "org.jetbrains.kotlin:221-1.8.10-release-430-IJ5591.52"
+        )
+    )
 }
 
 tasks {
@@ -26,6 +29,7 @@ tasks {
         sourceCompatibility = "11"
         targetCompatibility = "11"
     }
+
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
         kotlinOptions.jvmTarget = "11"
     }

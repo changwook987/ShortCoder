@@ -1,23 +1,22 @@
 package io.github.changwook987.shortcoder
 
-import com.intellij.codeInsight.actions.*
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.LangDataKeys
+import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.command.WriteCommandAction
 
 class ShortCoding : AnAction() {
-
     override fun actionPerformed(event: AnActionEvent) {
-        val project = event.project ?: error("project is null")
-        val file = event.getData(LangDataKeys.PSI_FILE)
-        if (file != null) {
-            var processor: AbstractLayoutCodeProcessor = ReformatCodeProcessor(project, file, null, false)
-            processor = OptimizeImportsProcessor(processor)
-            processor = RearrangeCodeProcessor(processor)
-            processor = CodeCleanupCodeProcessor(processor)
-            processor.run()
+        val project = event.project ?: return
+        val psiFile = event.getData(CommonDataKeys.PSI_FILE) ?: return
 
+        WriteCommandAction.writeCommandAction(project).run<RuntimeException> {
+            try {
+
+                ShortCoder.compress(psiFile)
+            } catch (_: NotImplementedError) {
+            }
         }
     }
-
 }
+
